@@ -1,9 +1,8 @@
 {
-  "name": "emergency-hamburg-site",
-  "version": "1.0.0",
+  "name": "dunkerque-rp-site",
+  "version": "3.0.0",
   "private": true,
   "main": "index.js",
-  "scripts": { "start": "node index.js", "test": "node --test test.js" },
-  "engines": { "node": ">=20" },
-  "dependencies": { "express": "^4.21.2" }
+  "description": "Site Dunkerque RP : un routeur Node (index.js) qui sert les pages HTML et l'API, sans dépendance",
+  "engines": { "node": ">=20" }
 }
