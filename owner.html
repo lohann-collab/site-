@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Espace owner | Dunkerque RP</title>
+<meta name="description" content="Espace owner.">
+<meta name="theme-color" content="#0c2a52">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=Public+Sans:wght@400;600&amp;display=swap">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body data-page="owner">
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="top">
+<div class="wrap bar">
+<a class="brand" href="/">Dunkerque RP</a>
+<nav class="menu" aria-label="Navigation principale"><a href="/serveur">Le serveur</a><a href="/staff">Nos staff</a><a href="/zones">Zones safe</a><a href="/recrutements">Recrutements</a><a href="/support">Support</a></nav>
+<div class="user" id="user-zone"><a class="btn btn-signal" href="/connexion">Connexion Discord</a></div>
+</div>
+</header>
+<main id="contenu">
+<section class="pagehead"><div class="wrap"><h1>Espace owner</h1><p class="lede">Sauvegarde du serveur, droits du staff et sanctions.</p></div></section><svg class="wave wave-down" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path fill="#eef3fa" d="M0 40C100 8 200 8 300 40S500 72 600 40S800 8 900 40S1100 72 1200 40V80H0Z"/></svg><section class="section"><div class="wrap"><div id="denied" hidden><div class="gate"><p>Vous n'avez pas accès à cette page.</p><a class="btn btn-dark" href="/dashboard">Retour au tableau de bord</a></div></div><div id="content" hidden>
+<p id="msg" class="status" role="status" aria-live="polite"></p>
+<div class="grid">
+<div class="panel"><h2>Sauvegarde du serveur</h2>
+<p>Télécharge la structure du serveur : rôles, salons et réglages du bot.</p>
+<button class="btn btn-dark" id="backup" type="button">Sauvegarder maintenant</button></div>
+<div class="panel"><h2>Droit de sanctionner</h2>
+<div class="form"><div class="field">Membre
+<input id="q" type="search" placeholder="Rechercher un pseudo" autocomplete="off" aria-label="Rechercher un membre">
+<ul class="results" id="results"></ul><div id="picked"></div></div></div>
+<p class="actions"><button class="btn btn-dark btn-small" id="grant" type="button">Autoriser sanctions et rank up</button><button class="btn btn-danger btn-small" id="revoke" type="button">Retirer ce droit</button></p>
+<ul class="list" id="perms"></ul></div>
+</div>
+<div class="panel"><h2>Sanctions récentes</h2>
+<p class="note">Retirer une sanction restaure l'ancien rôle (derank), annule le rank up ou lève le ban et le timeout.</p>
+<ul class="list" id="sanctions"></ul></div></div></div></section>
+</main>
+<footer class="foot"><div class="wrap"><p>© 2026 Dunkerque RP. Site communautaire non affilié à Roblox Corporation. <a href="/appel">Demande d'unban</a></p></div></footer>
+<script src="/site-config.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

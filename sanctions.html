@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sanctions | Dunkerque RP</title>
+<meta name="description" content="Sanctions et rank up.">
+<meta name="theme-color" content="#0c2a52">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=Public+Sans:wght@400;600&amp;display=swap">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body data-page="sanctions">
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="top">
+<div class="wrap bar">
+<a class="brand" href="/">Dunkerque RP</a>
+<nav class="menu" aria-label="Navigation principale"><a href="/serveur">Le serveur</a><a href="/staff">Nos staff</a><a href="/zones">Zones safe</a><a href="/recrutements">Recrutements</a><a href="/support">Support</a></nav>
+<div class="user" id="user-zone"><a class="btn btn-signal" href="/connexion">Connexion Discord</a></div>
+</div>
+</header>
+<main id="contenu">
+<section class="pagehead"><div class="wrap"><h1>Sanctions</h1><p class="lede">Sanctionner ou promouvoir un membre. Le bot applique les rôles et vérifie la hiérarchie.</p></div></section><svg class="wave wave-down" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path fill="#eef3fa" d="M0 40C100 8 200 8 300 40S500 72 600 40S800 8 900 40S1100 72 1200 40V80H0Z"/></svg><section class="section"><div class="wrap"><div id="denied" hidden><div class="gate"><p>Vous n'avez pas accès à cette page.</p><a class="btn btn-dark" href="/dashboard">Retour au tableau de bord</a></div></div><div id="content" hidden>
+<div class="form">
+<div class="field">Membre
+<input id="q" type="search" placeholder="Rechercher un pseudo (2 lettres minimum)" autocomplete="off" aria-label="Rechercher un membre">
+<ul class="results" id="results"></ul><div id="picked"></div></div>
+<div class="tabs" role="tablist">
+<button class="tab" type="button" role="tab" data-tab="sanction" aria-selected="true">Sanction</button>
+<button class="tab" type="button" role="tab" data-tab="rank" aria-selected="false">Rank up</button>
+</div>
+<form id="sec-sanction" novalidate>
+<label>Sanction<select id="kind"><option value="derank">Derank</option><option value="avertissement">Avertissement</option><option value="rien">Rien</option></select></label>
+<div id="derank-fields">
+<label>Rôle à retirer<select id="remove-role"></select></label>
+<label>Rôle à mettre<select id="add-role"></select></label>
+<p class="note">Le rôle à mettre doit être plus bas que le rôle retiré.</p>
+</div>
+<label id="reason-field">Raison<textarea id="reason" rows="3" maxlength="300"></textarea></label>
+<button class="btn btn-dark" type="submit">Valider</button>
+</form>
+<form id="sec-rank" novalidate hidden>
+<label>Rôle à donner<select id="rank-role"></select></label>
+<p class="note">Un rank up donne toujours un rôle plus haut que le rôle actuel du membre.</p>
+<button class="btn btn-dark" type="submit">Promouvoir</button>
+</form>
+<p id="msg" class="status" role="status" aria-live="polite"></p>
+</div></div></div></section>
+</main>
+<footer class="foot"><div class="wrap"><p>© 2026 Dunkerque RP. Site communautaire non affilié à Roblox Corporation. <a href="/appel">Demande d'unban</a></p></div></footer>
+<script src="/site-config.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

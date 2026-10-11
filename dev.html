@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Espace développeur | Dunkerque RP</title>
+<meta name="description" content="Espace développeur.">
+<meta name="theme-color" content="#0c2a52">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=Public+Sans:wght@400;600&amp;display=swap">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body data-page="dev">
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="top">
+<div class="wrap bar">
+<a class="brand" href="/">Dunkerque RP</a>
+<nav class="menu" aria-label="Navigation principale"><a href="/serveur">Le serveur</a><a href="/staff">Nos staff</a><a href="/zones">Zones safe</a><a href="/recrutements">Recrutements</a><a href="/support">Support</a></nav>
+<div class="user" id="user-zone"><a class="btn btn-signal" href="/connexion">Connexion Discord</a></div>
+</div>
+</header>
+<main id="contenu">
+<section class="pagehead"><div class="wrap"><h1>Espace développeur</h1><p class="lede">Journaux, ressources du bot et état du site. Actualisation toutes les 5 secondes.</p></div></section><svg class="wave wave-down" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path fill="#eef3fa" d="M0 40C100 8 200 8 300 40S500 72 600 40S800 8 900 40S1100 72 1200 40V80H0Z"/></svg><section class="section"><div class="wrap"><div id="denied" hidden><div class="gate"><p>Vous n'avez pas accès à cette page.</p><a class="btn btn-dark" href="/dashboard">Retour au tableau de bord</a></div></div><div id="content" hidden>
+<div class="grid">
+<div class="panel"><h2>Ressources</h2><div id="system"><p class="note">Chargement…</p></div></div>
+<div class="panel"><h2>État du site</h2><ul class="checks" id="checks"></ul></div>
+</div>
+<div class="panel"><h2>Journaux</h2>
+<div class="tabs" role="tablist">
+<button class="tab" type="button" role="tab" data-kind="console" aria-selected="true">Console Discord</button>
+<button class="tab" type="button" role="tab" data-kind="command" aria-selected="false">Commandes exécutées</button>
+<button class="tab" type="button" role="tab" data-kind="site" aria-selected="false">Connexions au site</button>
+</div>
+<pre class="log" id="logs">Chargement…</pre></div></div></div></section>
+</main>
+<footer class="foot"><div class="wrap"><p>© 2026 Dunkerque RP. Site communautaire non affilié à Roblox Corporation. <a href="/appel">Demande d'unban</a></p></div></footer>
+<script src="/site-config.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

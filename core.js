@@ -151,6 +151,30 @@ function validateApplication(raw) {
   if (Object.keys(errors).length) return { ok: false, errors };
   return { ok: true, value: { robloxName, age, department, experience, motivation, availability } };
 }
+function validateAppeal(raw) {
+  const r = raw && typeof raw === "object" ? raw : {}, errors = {};
+  const reason = clean(r.reason), argument = clean(r.argument);
+  if (reason.length < 10 || reason.length > 600) errors.reason = "Expliquez la raison de votre sanction (10 à 600 caractères).";
+  if (argument.length < 30 || argument.length > 1500) errors.argument = "Votre demande : 30 à 1500 caractères.";
+  if (Object.keys(errors).length) return { ok: false, errors };
+  return { ok: true, value: { reason, argument } };
+}
+function buildAppealBody(a, user) {
+  return {
+    username: `Appels — ${SERVER_NAME}`,
+    allowed_mentions: { parse: [] },
+    embeds: [{
+      title: "Demande d'unban (site web)",
+      color: 0x2b6cb0,
+      description: `Demandeur : <@${user.id}> (${cut(String(user.name || "inconnu"), 60)})`,
+      fields: [
+        { name: "Pourquoi avez-vous été sanctionné ?", value: cut(a.reason, 1000) },
+        { name: "Votre demande", value: cut(a.argument, 1000) },
+      ],
+      timestamp: new Date().toISOString(),
+    }],
+  };
+}
 // Limite en mémoire : par instance serverless, donc protection partielle sur Vercel.
 const buckets = new Map();
 function rateLimit(key, max, windowMs, now = Date.now()) {
@@ -168,7 +192,7 @@ function buildWebhookBody(a, user) {
     allowed_mentions: { parse: [] },
     embeds: [{
       title: "Nouvelle candidature (site web)",
-      color: 0xf2b705,
+      color: 0x2b6cb0,
       description: `Candidat : <@${user.id}> (${cut(String(user.name || "inconnu"), 60)})`,
       fields: [
         { name: "Pseudo Roblox", value: cut(a.robloxName, 100), inline: true },
@@ -183,18 +207,45 @@ function buildWebhookBody(a, user) {
   };
 }
 
-// ---------- API du bot (statistiques de /admin) ----------
-async function fetchBotStats() {
+// ---------- API du bot (le site demande au bot : rôles, stats, sanctions…) ----------
+function botConfigured() {
   const url = env("BOT_API_URL"), token = env("BOT_API_TOKEN");
-  if (!url || token.length < 32 || (PROD && !url.startsWith("https://"))) return { ok: false, configured: false, reason: "API du bot non configurée." };
-  try {
-    const r = await fetch(`${url.replace(/\/$/, "")}/api/stats`, { headers: { Authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(5000) });
-    if (!r.ok) return { ok: false, configured: true, reason: `L'API du bot a répondu ${r.status}.` };
-    const d = await r.json();
-    const n = (v) => (Number.isFinite(Number(v)) ? Number(v) : 0);
-    return { ok: true, configured: true, data: { members: n(d.members), tickets_open: n(d.tickets_open), applications_pending: n(d.applications_pending), warnings_active: n(d.warnings_active) } };
-  } catch { return { ok: false, configured: true, reason: "API du bot injoignable." }; }
+  if (!url || token.length < 32) return false;
+  return url.startsWith("https://") || env("BOT_API_ALLOW_HTTP") === "1";
 }
+async function botRequest(method, pathAndQuery, body, actorId) {
+  if (!botConfigured()) return { status: 503, data: { error: "Le bot n'est pas connecté au site." } };
+  const headers = { Authorization: `Bearer ${env("BOT_API_TOKEN")}` };
+  if (actorId) headers["X-Actor-Id"] = String(actorId);
+  if (body !== undefined) headers["Content-Type"] = "application/json";
+  try {
+    const r = await fetch(`${env("BOT_API_URL").replace(/\/$/, "")}/api${pathAndQuery}`, {
+      method, headers, body: body !== undefined ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(8000),
+    });
+    let data = {};
+    try { data = await r.json(); } catch { /* corps vide */ }
+    return { status: r.status, data };
+  } catch { return { status: 502, data: { error: "Le bot est injoignable." } }; }
+}
+// Niveau d'accès (member / staff / dev / owner) : décidé par le bot, avec repli sur les ID des variables d'environnement.
+const accessCache = new Map();
+async function getAccess(id) {
+  const hit = accessCache.get(id);
+  if (hit && Date.now() - hit.t < 60000) return hit.v;
+  let v = null;
+  const r = await botRequest("GET", `/access?user_id=${encodeURIComponent(id)}`);
+  if (r.status === 200 && typeof r.data.level === "string") v = { level: r.data.level, can_sanction: !!r.data.can_sanction };
+  if (!v) {
+    const owner = idList(env("OWNER_DISCORD_IDS")).includes(id), dev = idList(env("DEV_DISCORD_IDS")).includes(id);
+    v = { level: owner ? "owner" : dev ? "dev" : "member", can_sanction: owner };
+    if (accessCache.size > 500) accessCache.clear();
+    return v; // pas de mise en cache d'un repli
+  }
+  if (accessCache.size > 500) accessCache.clear();
+  accessCache.set(id, { t: Date.now(), v });
+  return v;
+}
+const LEVELS = { member: 0, staff: 1, dev: 2, owner: 3 };
 
 module.exports = {
   env, PROD, SESSION_COOKIE, STATE_COOKIE, NEXT_COOKIE, SESSION_TTL_S, STATE_TTL_S, DEPARTMENTS,
@@ -202,5 +253,6 @@ module.exports = {
   parseCookies, cookie, clearCookie, addCookies,
   createSession, verifySession, needsRenewal, getSession, roleOf, cleanAvatar,
   generateState, statesMatch, buildAuthorizeUrl, checkCallback, safeNext,
-  validateApplication, rateLimit, isValidWebhookUrl, buildWebhookBody, fetchBotStats, buckets,
+  validateApplication, validateAppeal, rateLimit, isValidWebhookUrl, buildWebhookBody, buildAppealBody,
+  botConfigured, botRequest, getAccess, LEVELS, buckets,
 };
